@@ -8,6 +8,16 @@
     {% bootstrap_css %} {# Embed Bootstrap CSS #}
     {% bootstrap_javascript jquery='full' %} {# Embed Bootstrap JS+jQuery #}
     {{ form.media }} {# Adds date-picker required JS and CSS #}
+
+     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
+          integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+          crossorigin=""/>
+
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
+            integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
+            crossorigin=""></script>
+
     <title>Fogos</title>
 </head>
 <body>
@@ -39,35 +49,7 @@
 
 </header>
 
-
 <h1 align="center"> Viu um incêndio e ainda não foi reportado?</h1>
-
-
-<!--
-<form class="text-center border border-light p-5" action="/store_url" method="post">{% csrf_token %}
-
-    <p class="h4 mb-4">Relatar um incêndio</p>
-
-    <input type="text" id="defaultSubscriptionFormPassword" class="form-control mb-4" placeholder="Data de ocorrência">
-
-    <input type="text" id="input_natureza" class="form-control mb-4" placeholder="Natureza">
-    <input type="text" id="input_ocorr" class="form-control mb-4" placeholder="Data de ocorrência">
-    <input type="text" id="input_estado" class="form-control mb-4" placeholder="Estado">
-    <input type="text" id="input_dist" class="form-control mb-4" placeholder="Distrito">
-    <input type="text" id="input_conc" class="form-control mb-4" placeholder="Concelho">
-    <input type="text" id="defaultSubscriptionFormPassword" class="form-control mb-4" placeholder="Freguesia">
-    <input type="text" id="defaultSubscriptionFormPassword" class="form-control mb-4" placeholder="Localidade">
-    <input type="text" id="defaultSubscriptionFormPassword" class="form-control mb-4" placeholder="Latitude">
-    <input type="text" id="defaultSubscriptionFormPassword" class="form-control mb-4" placeholder="Longitude">
-    <input type="text" id="defaultSubscriptionFormPassword" class="form-control mb-4" placeholder="Meios terrestres no local">
-    <input type="text" id="defaultSubscriptionFormPassword" class="form-control mb-4" placeholder="Operacionais terrestres no local?">
-    <input type="text" id="defaultSubscriptionFormPassword" class="form-control mb-4" placeholder="Meios aereos no local">
-    <input type="text" id="defaultSubscriptionFormPassword" class="form-control mb-4" placeholder="Operacionais terrestres no local?">
-
-    <button type="submit" >Submeter</button>
-
-</form>
--->
 
 <div class="container">
     <div class="row">
@@ -91,9 +73,11 @@
                     {% endif %}
                     </div>
                 {% endfor %}
-        <input type="submit" class="btn btn-primary mb-2" value="Submit"/>
+
+                <input type="submit" class="btn btn-primary mb-2" value="Submit"/>
         </form>
     </div>
+</div>
 </div>
 
 </body>
