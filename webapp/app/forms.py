@@ -1,12 +1,15 @@
 from django import forms
 from bootstrap_datepicker_plus import DatePickerInput
 
+
 STATE = [('a','Em Resolução'),
          ('b','Conclusão'),
          ('c','Encerrada'),
          ('d','Em curso'),
          ('e','Despacho de 1º Alerta')
          ]
+
+
 DISTRITOS = [('a','Aveiro'),
              ('b', 'Beja'),
              ('c', 'Braga'),
@@ -62,4 +65,3 @@ class RelatarForm(forms.Form):
     opTerrestres = forms.IntegerField(label = 'Operacionais Terrestres', widget=forms.NumberInput(attrs={'class': 'form-control'}))
     meiosAereos = forms.IntegerField(label = 'Meios Aéreos', widget=forms.NumberInput(attrs={'class': 'form-control'}))
     opAereos = forms.IntegerField(label = 'Operacionais Aéreos', widget=forms.NumberInput(attrs={'class': 'form-control'}))
-

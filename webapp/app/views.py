@@ -4,8 +4,10 @@ from django.shortcuts import render
 from .forms import RelatarForm
 from lxml import etree
 
+
 def index(request):
     return render(request, 'index.html')
+
 
 def relatar(request):
     form = RelatarForm()
