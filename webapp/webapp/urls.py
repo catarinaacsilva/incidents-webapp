@@ -25,5 +25,6 @@ urlpatterns = [
     path('relatar_url', views.relatar),
     path('estatisticas_url', views.estatisticas),
     path('avisos_url', views.avisos),
-    path('store_url', views.storeData)
+    path('store_url', views.storeData),
+    path('listar_url', views.listar),
 ]
