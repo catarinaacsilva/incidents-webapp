@@ -1,6 +1,8 @@
 import lxml.etree as LET #to use on xslt
+import xml.etree.ElementTree as ET
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.template import loader
 from .forms import RelatarForm
 from lxml import etree
 
@@ -22,6 +24,56 @@ def estatisticas(request):
 def avisos(request):
     return render(request, 'avisos.html')
 
+def listar(request):
+    return render(request, 'fogos_recentes.html')
+
+#lista de fogos que estao a ocorrer --> usar xpath (so para usar sem ser com a bd) e assim mostra uma lista de fogos sem ser no mapa
+def fogos_recentes_lista(request):
+    template = loader.get_template('fogos_recentes.html')
+
+    dic = {}
+    tree = ET.parse('xml/db.xml')
+    root = tree.getroot()
+    for c in root.findall('fogo'):
+        dic.update({c.find('Localidade').text: c.find('DataOcorrencia').text})
+
+    context = {
+        'info': dic,
+    }
+    return HttpResponse(template.render(context, request))
+
+
+#mostrar detalhes dos incendios descritos na função fogos_recentes_lista (para um especifico selecionado)
+def get_fogo(xml_file: str, value: str):
+    dic = {}
+    tree = ET.parse(xml_file)
+    root = tree.getroot()
+    for c in root.findall('fogo'):
+        if c.find("Localidade").text == value:
+            dic = {
+                'DataOcorrencia': c.find('DataOcorrencia').text,
+                'Natureza': c.find('Natureza').text,
+                'Estado': c.find('Estado').text,
+                'Distrito': c.find('Distrito').text,
+                'Concelho': c.find('Concelho').text,
+                'Freguesia': c.find('Freguesia').text,
+                'Localidade': c.find('Localidade').text,
+                'Latitude': c.find('Latitude').text,
+                'Longitude': c.find('Longitude').text,
+                'MeiosTerrestres': c.find('MeiosTerrestres').text,
+                'OperacionaisTerrestres': c.find('OperacionaisTerrestres').text,
+                'MeiosAereos': c.find('MeiosAereos').text,
+                'OperacionaisAereos': c.find('OperacionaisAereos').text,
+            }
+            break
+    return dic
+
+#mostrar detalhes dos incendios descritos na função fogos_recentes_lista (para um especifico selecionado)
+def mostrar_detalhes(request):
+    template = loader.get_template('detalhes.html')
+    value = request.GET.get('localidade')
+    context = get_fogo("xml/db.xml", value)
+    return HttpResponse(template.render(context, request))
 
 def storeData(request):
     if request.method == 'POST':
