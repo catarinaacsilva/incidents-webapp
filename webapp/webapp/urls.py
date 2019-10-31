@@ -22,6 +22,7 @@ urlpatterns = [
     path('', views.index),
     path('index_url', views.index),
     path('fogos_url', views.index),
+    path('sobre_url', views.sobre),
     path('relatar_url', views.relatar),
     path('estatisticas_url', views.estatisticas),
     path('avisos_url', views.avisos),
