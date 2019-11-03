@@ -21,7 +21,8 @@ def relatar(request):
 
 
 def estatisticas(request):
-    return render(request, 'estatisticas.html')
+    month = get_occmonth()
+    return render(request, 'estatisticas.html', {'month': month})
 
 
 def avisos(request):
@@ -30,14 +31,22 @@ def avisos(request):
 def listar(request):
     return render(request, 'fogos_recentes.html')
 
+def get_occmonth():
+    tree = ET.parse('app/xml/db.xml')
+    root = tree.getroot()
+    months = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    for c in root.findall('incidente'):
+        months[int(c.find('DataOcorrencia').text[5:7])-1] += 1
+    return months
+
 #lista de fogos que estao a ocorrer --> usar xpath (so para usar sem ser com a bd) e assim mostra uma lista de fogos sem ser no mapa
 def fogos_recentes_lista(request):
     template = loader.get_template('fogos_recentes.html')
 
     dic = {}
-    tree = ET.parse('xml/db.xml')
+    tree = ET.parse('app/xml/db.xml')
     root = tree.getroot()
-    for c in root.findall('fogo'):
+    for c in root.findall('incidente'):
         dic.update({c.find('Localidade').text: c.find('DataOcorrencia').text})
 
     context = {
