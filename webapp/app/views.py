@@ -1,4 +1,7 @@
 import lxml.etree as LET #to use on xslt
+from BaseXClient import BaseXClient
+from collections import defaultdict
+import json
 import xml.etree.ElementTree as ET
 from django.http import HttpResponse
 from django.shortcuts import render
@@ -21,8 +24,11 @@ def relatar(request):
 
 
 def estatisticas(request):
-    month = get_occmonth()
-    return render(request, 'estatisticas.html', {'month': month})
+    tparams = {
+        'month': get_occmonth(),
+        'categories': get_occcategory()
+    }
+    return render(request, 'estatisticas.html', tparams)
 
 
 def avisos(request):
@@ -32,15 +38,43 @@ def listar(request):
     return render(request, 'fogos_recentes.html')
 
 def get_occmonth():
+    session = BaseXClient.Session('localhost', 1984, 'admin', 'admin')
+    file = open('app/xml/occu_p_month.xqm', 'r')
+    try:
+        query = session.query(file.read())
+        occuMonth = json.loads(query.execute())
+        query.close()
+    finally:
+        # close session
+        if session:
+            session.close()
+    return list(occuMonth.values())
+
+    '''
     tree = ET.parse('app/xml/db.xml')
     root = tree.getroot()
     months = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     for c in root.findall('incidente'):
         months[int(c.find('DataOcorrencia').text[5:7])-1] += 1
     return months
+    '''
+
+def get_occcategory():
+    session = BaseXClient.Session('localhost', 1984, 'admin', 'admin')
+    file = open('app/xml/occu_p_category.xqm', 'r')
+    try:
+        query = session.query(file.read())
+        occuCategory = json.loads(query.execute())
+        query.close()
+    finally:
+        # close session
+        if session:
+            session.close()
+    return occuCategory
 
 #lista de fogos que estao a ocorrer --> usar xpath (so para usar sem ser com a bd) e assim mostra uma lista de fogos sem ser no mapa
 def fogos_recentes_lista(request):
+
     template = loader.get_template('fogos_recentes.html')
 
     dic = {}
@@ -53,6 +87,7 @@ def fogos_recentes_lista(request):
         'info': dic,
     }
     return HttpResponse(template.render(context, request))
+
 
 
 #mostrar detalhes dos incendios descritos na função fogos_recentes_lista (para um especifico selecionado)
@@ -82,6 +117,7 @@ def get_fogo(xml_file: str, value: str):
 
 #mostrar detalhes dos incendios descritos na função fogos_recentes_lista (para um especifico selecionado)
 def mostrar_detalhes(request):
+
     template = loader.get_template('detalhes.html')
     value = request.GET.get('localidade')
     context = get_fogo("xml/db.xml", value)

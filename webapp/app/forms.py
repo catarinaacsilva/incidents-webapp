@@ -10,28 +10,27 @@ STATE = [('a','Em Resolução'),
          ]
 
 
-DISTRITOS = [('a','Aveiro'),
-             ('b', 'Beja'),
-             ('c', 'Braga'),
-             ('d','Bragança'),
-             ('e','Castelo Branco'),
-             ('f','Coimbra'),
-             ('g','Évora'),
-             ('h','Faro'),
-             ('i','Guarda'),
-             ('j','Leiria'),
-             ('k','Lisboa'),
-             ('l','Portalegre'),
-             ('m','Porto'),
-             ('n','Santarém'),
-             ('o','Setúbal'),
-             ('p','Viana do Castelo'),
-             ('q','Vila Real'),
-             ('r','Viseu')
+DISTRITOS = [('Aveiro','Aveiro'),
+             ('Beja', 'Beja'),
+             ('Braga', 'Braga'),
+             ('Bragança','Bragança'),
+             ('Castelo Branco','Castelo Branco'),
+             ('Coimbra','Coimbra'),
+             ('Évora','Évora'),
+             ('Faro','Faro'),
+             ('Guarda','Guarda'),
+             ('Leiria','Leiria'),
+             ('Lisboa','Lisboa'),
+             ('Portalegre','Portalegre'),
+             ('Porto','Porto'),
+             ('Santarém','Santarém'),
+             ('Setúbal','Setúbal'),
+             ('Viana do Castelo','Viana do Castelo'),
+             ('Vila Real','Vila Real'),
+             ('Viseu','Viseu')
              ]
 
 NATUREZA=[
-    ('0', ''),
     ('a', 'Protecção e Assistência a Pessoas e Bens / Assistência em Saúde / Trauma'),
     ('b', 'Protecção e Assistência a Pessoas e Bens / Assistência em Saúde / Intoxicação'),
     ('c', 'Riscos Tecnológicos / Acidentes / Despiste'),
@@ -58,7 +57,6 @@ class RelatarForm(forms.Form):
     distrito = forms.CharField(label='Distrito', widget=forms.Select(choices=DISTRITOS, attrs={'class': 'form-control'}))
     concelho = forms.CharField(label='Concelho', widget=forms.TextInput(attrs={'class': 'form-control'}))
     freguesia = forms.CharField(label='Freguesia', widget=forms.TextInput(attrs={'class': 'form-control'}))
-    localidade = forms.CharField(label='Localidade', widget=forms.TextInput(attrs={'class': 'form-control'}))
     latitude = forms.FloatField(label='Latitude', widget=forms.NumberInput(attrs={'class': 'form-control'}))
     longitude = forms.FloatField(label='Longitude', widget=forms.NumberInput(attrs={'class': 'form-control'}))
     meiosTerrestres = forms.IntegerField(label='Meios Terrestres', widget=forms.NumberInput(attrs={'class': 'form-control'}))

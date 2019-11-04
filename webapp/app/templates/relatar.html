@@ -18,6 +18,8 @@
             integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
             crossorigin=""></script>
 
+    {% load staticfiles %}
+
     <title>Incidentes</title>
 </head>
 <body>
@@ -77,11 +79,14 @@
                     </div>
                 {% endfor %}
 
+            <div id="mapid" style="height: 360px;" class="fieldWrapper form-group" aria-required="true"></div>
+
                 <input type="submit" class="btn btn-primary mb-2" value="Submit"/>
         </form>
     </div>
 </div>
 </div>
-
+<script src="{% static "js/distritos.js" %}"></script>
+<script src="{% static "js/map_relatar.js" %}"></script>
 </body>
 </html>
