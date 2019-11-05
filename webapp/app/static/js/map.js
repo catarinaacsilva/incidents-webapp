@@ -4,38 +4,14 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=p
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
     maxZoom: 18,
     id: 'mapbox.streets',
-    accessToken: 'your.mapbox.access.token'
+    accessToken: 'pk.eyJ1IjoibWFyaW9scGFudHVuZXMiLCJhIjoiY2syYzhkcjdpMHpxbzNibWpjN3F2aDU3dyJ9.FklIUy73dB7yzL7NSYLvWA'
 }).addTo(map);
 
-//var current_position, current_accuracy;
-
-function onLocationFound(e) {
-
-	if (current_position) {
-        map.removeLayer(current_position);
-        map.removeLayer(current_accuracy);
-    }
-
-	console.log('on location...')
-
-    //var radius = e.accuracy / 2;
-    //current_position = L.marker(e.latlng).addTo(map); //.bindPopup("You are within " + radius + " meters from this point").openPopup();
-    //current_accuracy = L.circle(e.latlng, radius).addTo(map);
+if (navigator.geolocation) {
+	navigator.geolocation.getCurrentPosition(function (position) {
+		lat = position.coords.latitude;
+		lng = position.coords.longitude;
+		var newLatLng = new L.LatLng(lat, lng);
+		map.panTo(newLatLng);
+	});
 }
-
-function onLocationError(e) {
-    alert(e.message);
-}
-
-//map.on('locationfound', onLocationFound);
-//map.on('locationerror', onLocationError);
-
-// wrap map.locate in a function
-function locate() {
-    map.locate({setView: true, maxZoom: 16});
-}
-
-locate();
-
-// call locate every 3 seconds... forever
-// setInterval(locate, 3000);

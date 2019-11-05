@@ -2,11 +2,11 @@ from django import forms
 from bootstrap_datepicker_plus import DatePickerInput
 
 
-STATE = [('a','Em Resolução'),
-         ('b','Conclusão'),
-         ('c','Encerrada'),
-         ('d','Em curso'),
-         ('e','Despacho de 1º Alerta')
+STATE = [('Em Resolução','Em Resolução'),
+         ('Conclusão','Conclusão'),
+         ('Encerrada','Encerrada'),
+         ('Em curso','Em curso'),
+         ('Despacho de 1º Alerta','Despacho de 1º Alerta')
          ]
 
 
@@ -31,23 +31,23 @@ DISTRITOS = [('Aveiro','Aveiro'),
              ]
 
 NATUREZA=[
-    ('a', 'Protecção e Assistência a Pessoas e Bens / Assistência em Saúde / Trauma'),
-    ('b', 'Protecção e Assistência a Pessoas e Bens / Assistência em Saúde / Intoxicação'),
-    ('c', 'Riscos Tecnológicos / Acidentes / Despiste'),
-    ('d', 'Riscos Mistos / Incêndios em Detritos / Detritos confinados'),
-    ('e', 'Riscos Tecnológicos / Acidentes / Colisão rodoviária'),
-    ('f', 'Riscos Tecnológicos / Incêndios Urbanos ou em Área Urbanizável / Habitacional'),
-    ('g', 'Riscos Tecnológicos / Acidentes / Atropelamento rodoviário'),
-    ('h', 'Protecção e Assistência a Pessoas e Bens / Intervenção em conflitos legais / Agressão/Violação'),
-    ('i', 'Riscos Tecnológicos / Acidentes industriais e tecnológicos / Fuga de Gás em garrafa'),
-    ('j', 'Riscos Tecnológicos / Incêndios Urbanos ou em Área Urbanizável / Edifícios degradados ou devolutos'),
-    ('k', 'Protecção e Assistência a Pessoas e Bens / Assistência em Saúde / Intoxicação'),
-    ('l', 'Protecção e Assistência a Pessoas e Bens / Intervenção em conflitos legais / Suicídio/Homicídio na forma tentada'),
-    ('m', 'Riscos Mistos / Comprometimento total ou parcial de segurança, serviços ou estruturas / Inundação de estruturas por água canalizada'),
-    ('n', 'Protecção e Assistência a Pessoas e Bens / Assistência e Prevenção a actividades humanas / Limpeza de Via e Sinalização de Perigo'),
-    ('o', 'Riscos Mistos / Comprometimento total ou parcial de segurança, serviços ou estruturas / Queda de Árvore'),
-    ('p', 'Protecção e Assistência a Pessoas e Bens / Assistência e Prevenção a actividades humanas / Busca e Resgate Terrestre, de Animais'),
-    ('q', 'Protecção e Assistência a Pessoas e Bens / Assistência e Prevenção a actividades humanas / Limpeza de Via e Sinalização de Perigo'),
+    ('Protecção e Assistência a Pessoas e Bens / Assistência em Saúde / Trauma', 'Protecção e Assistência a Pessoas e Bens / Assistência em Saúde / Trauma'),
+    ('Protecção e Assistência a Pessoas e Bens / Assistência em Saúde / Intoxicação', 'Protecção e Assistência a Pessoas e Bens / Assistência em Saúde / Intoxicação'),
+    ('Riscos Tecnológicos / Acidentes / Despiste', 'Riscos Tecnológicos / Acidentes / Despiste'),
+    ('Riscos Mistos / Incêndios em Detritos / Detritos confinados', 'Riscos Mistos / Incêndios em Detritos / Detritos confinados'),
+    ('Riscos Tecnológicos / Acidentes / Colisão rodoviária', 'Riscos Tecnológicos / Acidentes / Colisão rodoviária'),
+    ('Riscos Tecnológicos / Incêndios Urbanos ou em Área Urbanizável / Habitacional', 'Riscos Tecnológicos / Incêndios Urbanos ou em Área Urbanizável / Habitacional'),
+    ('Riscos Tecnológicos / Acidentes / Atropelamento rodoviário', 'Riscos Tecnológicos / Acidentes / Atropelamento rodoviário'),
+    ('Protecção e Assistência a Pessoas e Bens / Intervenção em conflitos legais / Agressão/Violação', 'Protecção e Assistência a Pessoas e Bens / Intervenção em conflitos legais / Agressão/Violação'),
+    ('Riscos Tecnológicos / Acidentes industriais e tecnológicos / Fuga de Gás em garrafa', 'Riscos Tecnológicos / Acidentes industriais e tecnológicos / Fuga de Gás em garrafa'),
+    ('Riscos Tecnológicos / Incêndios Urbanos ou em Área Urbanizável / Edifícios degradados ou devolutos', 'Riscos Tecnológicos / Incêndios Urbanos ou em Área Urbanizável / Edifícios degradados ou devolutos'),
+    ('Protecção e Assistência a Pessoas e Bens / Assistência em Saúde / Intoxicação', 'Protecção e Assistência a Pessoas e Bens / Assistência em Saúde / Intoxicação'),
+    ('Protecção e Assistência a Pessoas e Bens / Intervenção em conflitos legais / Suicídio/Homicídio na forma tentada', 'Protecção e Assistência a Pessoas e Bens / Intervenção em conflitos legais / Suicídio/Homicídio na forma tentada'),
+    ('Riscos Mistos / Comprometimento total ou parcial de segurança, serviços ou estruturas / Inundação de estruturas por água canalizada', 'Riscos Mistos / Comprometimento total ou parcial de segurança, serviços ou estruturas / Inundação de estruturas por água canalizada'),
+    ('Protecção e Assistência a Pessoas e Bens / Assistência e Prevenção a actividades humanas / Limpeza de Via e Sinalização de Perigo', 'Protecção e Assistência a Pessoas e Bens / Assistência e Prevenção a actividades humanas / Limpeza de Via e Sinalização de Perigo'),
+    ('Riscos Mistos / Comprometimento total ou parcial de segurança, serviços ou estruturas / Queda de Árvore', 'Riscos Mistos / Comprometimento total ou parcial de segurança, serviços ou estruturas / Queda de Árvore'),
+    ('Protecção e Assistência a Pessoas e Bens / Assistência e Prevenção a actividades humanas / Busca e Resgate Terrestre, de Animais', 'Protecção e Assistência a Pessoas e Bens / Assistência e Prevenção a actividades humanas / Busca e Resgate Terrestre, de Animais'),
+    ('Protecção e Assistência a Pessoas e Bens / Assistência e Prevenção a actividades humanas / Limpeza de Via e Sinalização de Perigo', 'Protecção e Assistência a Pessoas e Bens / Assistência e Prevenção a actividades humanas / Limpeza de Via e Sinalização de Perigo'),
 ]
 
 class RelatarForm(forms.Form):

@@ -1,0 +1,14 @@
+{% block content %}
+    <h1>Incidentes recentes</h1>
+    {% if info %}
+    <ul>
+      {% for k, v in info.items %}
+      <li>
+        <a>{{ v }}{{ k }}</a>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p>Não há fogos recentes</p>
+    {% endif %}
+{% endblock %}

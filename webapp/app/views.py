@@ -8,6 +8,7 @@ from django.shortcuts import render
 from django.template import loader
 from .forms import RelatarForm
 from lxml import etree
+from datetime import datetime
 
 
 def index(request):
@@ -34,8 +35,14 @@ def estatisticas(request):
 def avisos(request):
     return render(request, 'avisos.html')
 
+
 def listar(request):
-    return render(request, 'fogos_recentes.html')
+    dic = incidentes_recentes_lista()
+    context = {
+        'info': dic,
+    }
+    return render(request, 'incidentes_recentes.html', context)
+
 
 def get_occmonth():
     session = BaseXClient.Session('localhost', 1984, 'admin', 'admin')
@@ -59,6 +66,7 @@ def get_occmonth():
     return months
     '''
 
+
 def get_occcategory():
     session = BaseXClient.Session('localhost', 1984, 'admin', 'admin')
     file = open('app/xml/occu_p_category.xqm', 'r')
@@ -72,25 +80,20 @@ def get_occcategory():
             session.close()
     return occuCategory
 
+
 #lista de fogos que estao a ocorrer --> usar xpath (so para usar sem ser com a bd) e assim mostra uma lista de fogos sem ser no mapa
-def fogos_recentes_lista(request):
-
-    template = loader.get_template('fogos_recentes.html')
-
+def incidentes_recentes_lista():
     dic = {}
-    tree = ET.parse('app/xml/db.xml')
+    tree = ET.parse('db.xml')
     root = tree.getroot()
     for c in root.findall('incidente'):
-        dic.update({c.find('Localidade').text: c.find('DataOcorrencia').text})
-
-    context = {
-        'info': dic,
-    }
-    return HttpResponse(template.render(context, request))
+        if c.find('Estado').text == 'Em Curso' and c.find('DataOcorrencia').text[5:7] == '12':
+            dic.update({c.attrib['Numero']: [c.find('DataOcorrencia').text]})
+    return dic
 
 
-
-#mostrar detalhes dos incendios descritos na função fogos_recentes_lista (para um especifico selecionado)
+#mostrar detalhes dos incendios descritos na função incidentes_recentes_lista (para um especifico selecionado)
+#ToDo...
 def get_fogo(xml_file: str, value: str):
     dic = {}
     tree = ET.parse(xml_file)
@@ -115,25 +118,88 @@ def get_fogo(xml_file: str, value: str):
             break
     return dic
 
-#mostrar detalhes dos incendios descritos na função fogos_recentes_lista (para um especifico selecionado)
+
+#mostrar detalhes dos incendios descritos na função incidentes_recentes_lista (para um especifico selecionado)
 def mostrar_detalhes(request):
 
     template = loader.get_template('detalhes.html')
     value = request.GET.get('localidade')
-    context = get_fogo("xml/db.xml", value)
+    context = get_fogo("db.xml", value)
     return HttpResponse(template.render(context, request))
 
-def storeData(request):
+
+def create_incident(data):
+    incidentes = etree.Element('incidentes')
+
+    num = datetime.now().strftime('%Y%m%d%H%M%S')
+
+    incidente = etree.SubElement(incidentes, 'incidente', {'Numero': str(num)})
+
+    data_ocorrencia = etree.SubElement(incidente, 'DataOcorrencia')
+    data_ocorrencia.text = data['data_ocorrencia'].strftime('%Y-%m-%dT%H:%M:%S')
+
+    natureza = etree.SubElement(incidente, 'Natureza')
+    natureza.text = data['natureza']
+
+    estado = etree.SubElement(incidente, 'Estado')
+    estado.text = data['estado']
+
+    distrito = etree.SubElement(incidente, 'Distrito')
+    distrito.text = data['distrito'].upper()
+
+    concelho = etree.SubElement(incidente, 'Concelho')
+    concelho.text = data['concelho']
+
+    freguesia = etree.SubElement(incidente, 'Freguesia')
+    freguesia.text = data['freguesia']
+
+    latitude = etree.SubElement(incidente, 'Latitude')
+    latitude.text = str(data['latitude'])
+
+    longitude = etree.SubElement(incidente, 'Longitude')
+    longitude.text = str(data['longitude'])
+
+    meios_terrestres = etree.SubElement(incidente, 'MeiosTerrestres')
+    meios_terrestres.text = str(data['meiosTerrestres'])
+
+    operacionais_terrestres = etree.SubElement(incidente, 'OperacionaisTerrestres')
+    operacionais_terrestres.text = str(data['opTerrestres'])
+
+    meios_aereos = etree.SubElement(incidente, 'MeiosAereos')
+    meios_aereos.text = str(data['meiosAereos'])
+
+    operacionais_aereos = etree.SubElement(incidente, 'OperacionaisAereos')
+    operacionais_aereos.text = str(data['opAereos'])
+
+    return incidentes
+
+
+# abre o ficheiro XML e adiciona o incidente no final
+def store_incident(doc, file_xml):
+    tree = etree.parse(file_xml)
+    root = tree.getroot()
+    root.append(doc)
+    tree.write(file_xml, xml_declaration=True, encoding='UTF-8')
+
+
+# recebe dados do formulário e coloca no ficheiro xml se os dados forem válidos
+def store_data(request):
     if request.method == 'POST':
         form = RelatarForm(request.POST)
         print(form.errors)
         if form.is_valid():
-            print(form)
             data = form.cleaned_data
             for k in data:
                 print('{} : {}'.format(k, data[k]))
+            doc = create_incident(data)
+            print(etree.tostring(doc.find('incidente'), pretty_print=True))
+            if validate(doc, 'app/xml/schema.xsd'):
+                print('ok')
+                store_incident(doc.find('incidente'), 'app/xml/db.xml')
+                #return HttpResponseRedirect('/thanks/')
+            else:
+                print('not ok')
             return HttpResponse(status=204)
-            #return HttpResponseRedirect('/thanks/')
         else:
             print('not valid')
             #return HttpResponseRedirect('/thanks/')
@@ -141,69 +207,22 @@ def storeData(request):
 
 
 #validate a xml file with xml schema
-def validate(file_xml: str, file_schema: str):
+def validate(doc: str, file_schema: str):
     # parsing xsd
     with open(file_schema, 'r') as schema_file:
         xmlschema_doc = etree.parse(schema_file)
         xmlschema = etree.XMLSchema(xmlschema_doc)
 
-        # parsing xml
-        with open(file_xml, 'r') as xml_file:
-            try:
-                doc = etree.parse(xml_file)
-                print('XML well formed, syntax ok.')
-
-            # check for file IO error
-            except IOError:
-                print('Invalid File')
-
-            # check for XML syntax errors
-            except etree.XMLSyntaxError as err:
-                print('XML Syntax Error, see error_syntax.log')
-                with open('error_syntax.log', 'w') as error_log_file:
-                    error_log_file.write(str(err.error_log))
-                quit()
-
-            except:
-                print('Unknown error, exiting.')
-                quit()
-
         # validate against schema
         try:
             xmlschema.assertValid(doc)
             print('XML valid, schema validation ok.')
+            return True
 
         except etree.DocumentInvalid as err:
-            print('Schema validation error, see error_schema.log')
-            with open('error_schema.log', 'w') as error_log_file:
-                error_log_file.write(str(err.error_log))
-            quit()
+            print('Schema validation error: '+str(err))
+            return False
 
-        except:
-            print('Unknown error, exiting.')
-            quit()
-
-        # validate schema
-        try:
-            xmlschema.assertValid(doc)
-            print('XML valid, schema validation ok.')
-
-        except etree.DocumentInvalid as err:
-            print('Schema validation error, see error_schema.log')
-            with open('error_schema.log', 'w') as error_log_file:
-                error_log_file.write(str(err.error_log))
-            quit()
-
-        except:
-            print('Unknown error, exiting.')
-            quit()
-
-
-#pagina html gerada com xslt depois dos dados serem inserios através do formulario (já passaram por uma verificação)
-# esta pagina apenas vai indicar se o incendio relatado foi aceite ou nao
-#def confirmData():
-
-
-
-
-
+        except Exception as e:
+            print('Unknown error: ' + str(e))
+            return False

@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path
 
 from app import views
+import os
 
 urlpatterns = [
     path('', views.index),
@@ -26,6 +27,8 @@ urlpatterns = [
     path('relatar_url', views.relatar),
     path('estatisticas_url', views.estatisticas),
     path('avisos_url', views.avisos),
-    path('store_url', views.storeData),
+    path('store_url', views.store_data),
     path('listar_url', views.listar),
 ]
+
+os.system('java -cp BaseX924.jar org.basex.BaseXServer &')
