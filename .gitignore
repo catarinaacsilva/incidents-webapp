@@ -3,3 +3,6 @@ __pycache__/
 xml/
 .idea/
 db.xml
+*.jar
+*.sqlite3
+*.csv
