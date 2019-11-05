@@ -31,23 +31,12 @@ DISTRITOS = [('Aveiro','Aveiro'),
              ]
 
 NATUREZA=[
-    ('Protecção e Assistência a Pessoas e Bens / Assistência em Saúde / Trauma', 'Protecção e Assistência a Pessoas e Bens / Assistência em Saúde / Trauma'),
-    ('Protecção e Assistência a Pessoas e Bens / Assistência em Saúde / Intoxicação', 'Protecção e Assistência a Pessoas e Bens / Assistência em Saúde / Intoxicação'),
-    ('Riscos Tecnológicos / Acidentes / Despiste', 'Riscos Tecnológicos / Acidentes / Despiste'),
-    ('Riscos Mistos / Incêndios em Detritos / Detritos confinados', 'Riscos Mistos / Incêndios em Detritos / Detritos confinados'),
-    ('Riscos Tecnológicos / Acidentes / Colisão rodoviária', 'Riscos Tecnológicos / Acidentes / Colisão rodoviária'),
-    ('Riscos Tecnológicos / Incêndios Urbanos ou em Área Urbanizável / Habitacional', 'Riscos Tecnológicos / Incêndios Urbanos ou em Área Urbanizável / Habitacional'),
-    ('Riscos Tecnológicos / Acidentes / Atropelamento rodoviário', 'Riscos Tecnológicos / Acidentes / Atropelamento rodoviário'),
-    ('Protecção e Assistência a Pessoas e Bens / Intervenção em conflitos legais / Agressão/Violação', 'Protecção e Assistência a Pessoas e Bens / Intervenção em conflitos legais / Agressão/Violação'),
-    ('Riscos Tecnológicos / Acidentes industriais e tecnológicos / Fuga de Gás em garrafa', 'Riscos Tecnológicos / Acidentes industriais e tecnológicos / Fuga de Gás em garrafa'),
-    ('Riscos Tecnológicos / Incêndios Urbanos ou em Área Urbanizável / Edifícios degradados ou devolutos', 'Riscos Tecnológicos / Incêndios Urbanos ou em Área Urbanizável / Edifícios degradados ou devolutos'),
-    ('Protecção e Assistência a Pessoas e Bens / Assistência em Saúde / Intoxicação', 'Protecção e Assistência a Pessoas e Bens / Assistência em Saúde / Intoxicação'),
-    ('Protecção e Assistência a Pessoas e Bens / Intervenção em conflitos legais / Suicídio/Homicídio na forma tentada', 'Protecção e Assistência a Pessoas e Bens / Intervenção em conflitos legais / Suicídio/Homicídio na forma tentada'),
-    ('Riscos Mistos / Comprometimento total ou parcial de segurança, serviços ou estruturas / Inundação de estruturas por água canalizada', 'Riscos Mistos / Comprometimento total ou parcial de segurança, serviços ou estruturas / Inundação de estruturas por água canalizada'),
-    ('Protecção e Assistência a Pessoas e Bens / Assistência e Prevenção a actividades humanas / Limpeza de Via e Sinalização de Perigo', 'Protecção e Assistência a Pessoas e Bens / Assistência e Prevenção a actividades humanas / Limpeza de Via e Sinalização de Perigo'),
-    ('Riscos Mistos / Comprometimento total ou parcial de segurança, serviços ou estruturas / Queda de Árvore', 'Riscos Mistos / Comprometimento total ou parcial de segurança, serviços ou estruturas / Queda de Árvore'),
-    ('Protecção e Assistência a Pessoas e Bens / Assistência e Prevenção a actividades humanas / Busca e Resgate Terrestre, de Animais', 'Protecção e Assistência a Pessoas e Bens / Assistência e Prevenção a actividades humanas / Busca e Resgate Terrestre, de Animais'),
-    ('Protecção e Assistência a Pessoas e Bens / Assistência e Prevenção a actividades humanas / Limpeza de Via e Sinalização de Perigo', 'Protecção e Assistência a Pessoas e Bens / Assistência e Prevenção a actividades humanas / Limpeza de Via e Sinalização de Perigo'),
+    ('Protecção e Assistência a Pessoas e Bens', 'Protecção e Assistência a Pessoas e Bens'),
+    ('Riscos Tecnológicos', 'Riscos Tecnológicos'),
+    ('Riscos Mistos', 'Riscos Mistos'),
+    ('Riscos Tecnológicos', 'Riscos Tecnológicos'),
+    ('Riscos Naturais','Riscos Naturais'),
+    ('Operações e Estados de Alerta', 'Operações e Estados de Alerta'),
 ]
 
 class RelatarForm(forms.Form):
