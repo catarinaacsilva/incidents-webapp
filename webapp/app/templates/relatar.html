@@ -43,7 +43,7 @@
                     <a class="nav-link" href="estatisticas_url">Estatisticas</a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" href="relatar_url">Relatar <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="relatar_url">Relatar<span class="sr-only">(current)</span></a>
                 </li>
                  <li class="nav-item">
                     <a class="nav-link" href="sobre_url">Sobre</a>
@@ -54,37 +54,42 @@
 
 </header>
 
-<h1 align="center"> Viu um incidente e ainda não foi reportado?</h1>
-
 <div class="container">
-    <div class="row">
-        <div class="col-md-6">
-            <form action="/store_url" method="POST" role="form">
-                {% csrf_token %}
-                {% if form.subject.errors %}
-                    <ol role="alertdialog">
-                        {% for error in form.subject.errors %}
-                            <li role="alert"><strong>{{ error|escape }}</strong></li>
+  <div class="card border-0 shadow my-5">
+    <div class="card-body p-5">
+        <h1 class="font-weight-light">Viu um incidente e ainda não foi reportado?</h1>
+        </br>
+        <div class="container">
+            <div class="row">
+                <div>
+                    <form action="/store_url" method="POST" role="form">
+                        {% csrf_token %}
+                        {% if form.subject.errors %}
+                            <ol role="alertdialog">
+                                {% for error in form.subject.errors %}
+                                    <li role="alert"><strong>{{ error|escape }}</strong></li>
+                                {% endfor %}
+                            </ol>
+                        {% endif %}
+
+                        {% for field in form %}
+                            <div class="fieldWrapper form-group" aria-required="true">
+                            <b>{{ field.label_tag }}</b>
+                            {{ field }}
+                            {% if field.help_text %}
+                                <p class="help">{{ field.help_text|safe }}</p>
+                            {% endif %}
+                            </div>
                         {% endfor %}
-                    </ol>
-                {% endif %}
 
-                {% for field in form %}
-                    <div class="fieldWrapper form-group" aria-required="true">
-                    {{ field.label_tag }}
-                    {{ field }}
-                    {% if field.help_text %}
-                        <p class="help">{{ field.help_text|safe }}</p>
-                    {% endif %}
-                    </div>
-                {% endfor %}
-
-            <div id="mapid" style="height: 360px;" class="fieldWrapper form-group" aria-required="true"></div>
-
-                <input type="submit" class="btn btn-primary mb-2" value="Submit"/>
-        </form>
+                        <div id="mapid" style="height: 360px;" class="fieldWrapper form-group" aria-required="true"></div>
+                        <input type="submit" class="btn btn-primary mb-2" value="Submit"/>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
+  </div>
 </div>
 <script src="{% static "js/distritos.js" %}"></script>
 <script src="{% static "js/map_relatar.js" %}"></script>

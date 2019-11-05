@@ -88,7 +88,7 @@ def incidentes_recentes_lista():
     root = tree.getroot()
     for c in root.findall('incidente'):
         if c.find('Estado').text == 'Em Curso' and c.find('DataOcorrencia').text[5:7] == '12':
-            dic.update({c.attrib['Numero']: [c.find('DataOcorrencia').text]})
+            dic.update({c.attrib['Numero']: [c.find('DataOcorrencia').text[0:10], c.find('Natureza').text, c.find('Estado').text, c.find('Distrito').text, c.find('Concelho').text, c.find('Freguesia').text, c.find('OperacionaisTerrestres').text]})
     return dic
 
 
