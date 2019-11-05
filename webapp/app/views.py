@@ -3,7 +3,7 @@ from BaseXClient import BaseXClient
 from collections import defaultdict
 import json
 import xml.etree.ElementTree as ET
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.template import loader
 from .forms import RelatarForm
@@ -35,6 +35,12 @@ def estatisticas(request):
 def avisos(request):
     return render(request, 'avisos.html')
 
+
+def confirm(request):
+    return render(request, 'confirm.html')
+
+def notconfirm(request):
+    return render(request, 'notconfirm.html')
 
 def listar(request):
     dic = incidentes_recentes_lista()
@@ -195,15 +201,14 @@ def store_data(request):
             print(etree.tostring(doc.find('incidente'), pretty_print=True))
             if validate(doc, 'app/xml/schema.xsd'):
                 print('ok')
-                store_incident(doc.find('incidente'), 'app/xml/db.xml')
-                #return HttpResponseRedirect('/thanks/')
+                store_incident(doc.find('incidente'), 'db.xml')
+                return HttpResponseRedirect('confirm')
             else:
                 print('not ok')
-            return HttpResponse(status=204)
+                return HttpResponseRedirect('notconfirm')
         else:
             print('not valid')
-            #return HttpResponseRedirect('/thanks/')
-    return HttpResponse(status=204)
+            return HttpResponseRedirect('notconfirm')
 
 
 #validate a xml file with xml schema
