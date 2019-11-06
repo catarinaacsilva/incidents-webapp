@@ -231,3 +231,18 @@ def validate(doc: str, file_schema: str):
         except Exception as e:
             print('Unknown error: ' + str(e))
             return False
+
+
+def list_recent_distance(lat, long, radius):
+    session = BaseXClient.Session('localhost', 1984, 'admin', 'admin')
+    file = open('app/xml/recent_incident.xqm', 'r')
+    #falta descobric como passar paramtros do python para a udf
+    try:
+        query = session.query(file.read() + 'return (local:list_in_range({}, {}, {}))'.format( lat, long, radius))
+        list_recent = json.loads(query.execute())
+        query.close()
+    finally:
+        # close session
+        if session:
+            session.close()
+    return list_recent
