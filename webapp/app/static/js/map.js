@@ -7,6 +7,24 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=p
     accessToken: 'pk.eyJ1IjoibWFyaW9scGFudHVuZXMiLCJhIjoiY2syYzhkcjdpMHpxbzNibWpjN3F2aDU3dyJ9.FklIUy73dB7yzL7NSYLvWA'
 }).addTo(map);
 
+var layerGroup = L.layerGroup().addTo(map);
+
+map.on("moveend", function(){
+	var c = map.getCenter();
+	var url = 'listar_incidentes_map?lat=' + c.lat + '&lng=' + c.lng + '&radius=50';
+	fetch(url).then(res => res.json()).then((out) => {
+		layerGroup.clearLayers();
+		console.log(out.length);
+		for(var i=0; i<out.length; i++){
+			var lat = out[i]["Latitude"];
+			var lng = out[i]["Longitude"];
+			var marker = L.marker([lat, lng]);
+			marker.bindPopup(out[i]['Natureza']);
+			layerGroup.addLayer(marker);
+		}
+	}).catch(err => { throw err });
+});
+
 if (navigator.geolocation) {
 	navigator.geolocation.getCurrentPosition(function (position) {
 		lat = position.coords.latitude;

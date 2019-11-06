@@ -31,6 +31,7 @@ urlpatterns = [
     path('listar_url', views.listar),
     path('confirm', views.confirm),
     path('notconfirm', views.notconfirm),
+    path('listar_incidentes_map', views.list_recent_distance),
 ]
 
 os.system('java -cp BaseX924.jar org.basex.BaseXServer &')

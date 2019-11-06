@@ -105,7 +105,7 @@ def get_fogo(xml_file: str, value: str):
     tree = ET.parse(xml_file)
     root = tree.getroot()
     for c in root.findall('fogo'):
-        if c.find("Localidade").text == value:
+        if c.find("Freguesia").text == value:
             dic = {
                 'DataOcorrencia': c.find('DataOcorrencia').text,
                 'Natureza': c.find('Natureza').text,
@@ -113,7 +113,6 @@ def get_fogo(xml_file: str, value: str):
                 'Distrito': c.find('Distrito').text,
                 'Concelho': c.find('Concelho').text,
                 'Freguesia': c.find('Freguesia').text,
-                'Localidade': c.find('Localidade').text,
                 'Latitude': c.find('Latitude').text,
                 'Longitude': c.find('Longitude').text,
                 'MeiosTerrestres': c.find('MeiosTerrestres').text,
@@ -129,7 +128,7 @@ def get_fogo(xml_file: str, value: str):
 def mostrar_detalhes(request):
 
     template = loader.get_template('detalhes.html')
-    value = request.GET.get('localidade')
+    value = request.GET.get('Freguesia')
     context = get_fogo("db.xml", value)
     return HttpResponse(template.render(context, request))
 
@@ -233,16 +232,22 @@ def validate(doc: str, file_schema: str):
             return False
 
 
-def list_recent_distance(lat, long, radius):
+def list_recent_distance(request):
+    lat = request.GET.get('lat')
+    long = request.GET.get('lng')
+    radius = request.GET.get('radius')
+
     session = BaseXClient.Session('localhost', 1984, 'admin', 'admin')
     file = open('app/xml/recent_incident.xqm', 'r')
-    #falta descobric como passar paramtros do python para a udf
+    rv = None
     try:
-        query = session.query(file.read() + 'return (local:list_in_range({}, {}, {}))'.format( lat, long, radius))
-        list_recent = json.loads(query.execute())
+        query = session.query(file.read() + 'return (local:list_in_range({}, {}, {}))'.format(lat, long, radius))
+        rv = json.loads(query.execute())
         query.close()
+
     finally:
         # close session
         if session:
             session.close()
-    return list_recent
+    print(json.dumps(rv))
+    return HttpResponse(json.dumps(rv), content_type="application/json")
