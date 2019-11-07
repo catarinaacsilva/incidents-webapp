@@ -3,6 +3,7 @@ from BaseXClient import BaseXClient
 from collections import defaultdict
 import json
 import xml.etree.ElementTree as ET
+import feedparser
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.template import loader
@@ -32,9 +33,47 @@ def estatisticas(request):
     return render(request, 'estatisticas.html', tparams)
 
 
-def avisos(request):
-    return render(request, 'avisos.html')
+def getRSS(request):
+    query = 'feed2'
+    #feeds = feedparser.parse("https://www.ipma.pt/resources.www/rss/" + query)
+    feeds = feedparser.parse("http://feeds.feedburner.com/prociv/" + query)
+    news = [];
+    for feed in feeds['entries']:
+        if (len(news) < 20):
+            news.append({
+                "title": feed['title'],
+                "link": feed['link']
+            })
 
+    tparams = {
+        "query": query,
+        "news": news,
+        "title": news[0]['title'],
+        "link": news[0]['link']
+    }
+
+    return render(request, 'avisos.html', tparams)
+
+def getRSS2(request):
+    query = request.GET.get('RSS')
+    feeds = feedparser.parse("http://feeds.feedburner.com/prociv/" + query)
+
+    news = [];
+    for feed in feeds['entries']:
+        if (len(news) < 20):
+            news.append({
+                "title": feed['title'],
+                "link": feed['link']
+            })
+
+    tparams = {
+        "query": query,
+        "news": news,
+        "title": news[0]['title'],
+        "link": news[0]['link']
+    }
+
+    return render(request, 'avisos.html', tparams)
 
 def confirm(request):
     return render(request, 'confirm.html')
