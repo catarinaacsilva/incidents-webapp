@@ -56,6 +56,10 @@ def getRSS(request):
 
 def getRSS2(request):
     query = request.GET.get('RSS')
+
+    if query is None:
+        query = 'feed2'
+
     feeds = feedparser.parse("http://feeds.feedburner.com/prociv/" + query)
 
     news = [];
